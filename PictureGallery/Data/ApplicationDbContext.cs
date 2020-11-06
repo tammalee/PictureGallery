@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PictureGallery.Models;
 
 namespace PictureGallery.Data
 {
@@ -12,5 +13,7 @@ namespace PictureGallery.Data
             : base(options)
         {
         }
+
+        public virtual DbSet<Picture> Pictures { get; set; }
     }
 }
