@@ -1,16 +1,26 @@
 ﻿@page
 @{
-    
+
 }
 <h1>Add Picture to Gallery</h1>
 
-<form action="" method="post" enctype="multipart/form-data">
-    <label>
-        Title
-        <input type="text" id="title" name="title" />
-    </label>
-    <label>
-        Upload picture
-        <input type="file" id="picture" name="picture" accept="image/png, image/jpg" />
-    </label>
-</form>
+
+@{
+    if (ViewBag.Success != null)
+    {
+        <p class="alert-success">@(ViewBag.Success)</p>
+    }
+    else if( ViewBag.Error != null)
+    {
+        <p class="alert-danger">@(ViewBag.Error)</p>
+    }
+
+}
+
+    <form action="/Picture/Upload" method="post" enctype="multipart/form-data" id="form-picture-create">
+        <label>
+            Upload picture
+            <input type="file" id="files" name="files" accept="image/png, image/jpg" multiple />
+        </label>
+        <input class="btn btn-primary" type="submit" value="Add picture" />
+    </form>

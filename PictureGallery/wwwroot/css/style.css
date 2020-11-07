@@ -1,0 +1,13 @@
+﻿body {
+
+}
+
+#form-picture-create label,
+#form-picture-create input {
+    display: block;
+}
+
+#form-picture-create label {
+    margin-bottom: 1.25rem;
+}
+
