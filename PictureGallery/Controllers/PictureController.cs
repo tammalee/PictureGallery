@@ -55,7 +55,14 @@ namespace PictureGallery.Controllers
             {
                 if( formFile.Length > 0)
                 {
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot/uploads", formFile.FileName);
+                    //For security reasons we want to rename the file
+                    var oldFileName = Path.GetFileNameWithoutExtension(formFile.FileName);
+                    var fileExtension = Path.GetExtension(formFile.FileName);
+                    var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
+
+                    //Save the new Filename to the database
+
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot/uploads", newFileName);
                     filePaths.Add(filePath);
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
