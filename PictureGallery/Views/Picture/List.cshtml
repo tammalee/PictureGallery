@@ -1,0 +1,14 @@
+﻿@page
+@{
+}
+<h1>List Pictures</h1>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p>You are logged in</p>
+}
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <p>You are logged out</p>
+}
