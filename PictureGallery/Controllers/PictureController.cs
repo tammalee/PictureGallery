@@ -5,6 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PictureGallery.Data;
+using PictureGallery.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,6 +23,26 @@ namespace PictureGallery.Controllers
 
         public IActionResult List()
         {
+            DirectoryInfo uploadsDirectory = null;
+            FileInfo[] files = null;
+
+            try
+            {
+                string uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                uploadsDirectory = new DirectoryInfo(uploadsPath);
+                files = uploadsDirectory.GetFiles();
+                ViewBag.Files = files;
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                throw new Exception("Directory not found.");
+            }
+            catch (IOException e)
+            {
+                throw new Exception("Failed to access directory.");
+            }
+            
+
             return View();
         }
 
@@ -62,6 +85,7 @@ namespace PictureGallery.Controllers
             
             long size = files.Sum(f => f.Length);
             var filePaths = new List<string>();
+            var pictureIDs = new List<int>();
 
             foreach (var formFile in files)
             {
@@ -71,8 +95,6 @@ namespace PictureGallery.Controllers
                     var oldFileName = Path.GetFileNameWithoutExtension(formFile.FileName);
                     var fileExtension = Path.GetExtension(formFile.FileName);
                     var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
-
-                    //Save the new Filename to the database along with the title
 
                     //upload the file to the uploads folder
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot/uploads", newFileName);
@@ -84,7 +106,7 @@ namespace PictureGallery.Controllers
                 }
             }
             //return View("Create");
-            return Ok(new { count = files.Count, size, filePaths });
+            return Ok(new { count = files.Count, size, filePaths, pictureIDs });
         }
 
         public bool validateTitle(string title)

@@ -12,3 +12,8 @@
 {
     <p>You are logged out</p>
 }
+
+@foreach(System.IO.FileInfo file in ViewBag.Files)
+{
+    <img src="~/uploads/@(file.Name)" />
+}
