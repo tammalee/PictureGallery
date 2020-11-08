@@ -40,11 +40,23 @@ namespace PictureGallery.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(List<IFormFile> files)
+        public async Task<IActionResult> Upload( string title, List<IFormFile> files)
         {
-            if( files.Count <= 0)
+
+            title = title != null ? title.Trim() : null;
+            bool validTitle = validateTitle(title);
+
+            if(!validTitle)
+            {
+                ViewBag.Error = "You must include a title and it can be no more than 50 characters";
+                ViewBag.Title = title;
+                return View("Create");
+            }
+
+            if ( files.Count <= 0)
             {
                 ViewBag.Error = "You must select a file to upload.";
+                ViewBag.Title = title;
                 return View("Create");
             }
             
@@ -60,8 +72,9 @@ namespace PictureGallery.Controllers
                     var fileExtension = Path.GetExtension(formFile.FileName);
                     var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
 
-                    //Save the new Filename to the database
+                    //Save the new Filename to the database along with the title
 
+                    //upload the file to the uploads folder
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot/uploads", newFileName);
                     filePaths.Add(filePath);
                     using (var stream = new FileStream(filePath, FileMode.Create))
@@ -72,6 +85,25 @@ namespace PictureGallery.Controllers
             }
             //return View("Create");
             return Ok(new { count = files.Count, size, filePaths });
+        }
+
+        public bool validateTitle(string title)
+        {
+            var valid = true;
+
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                valid = false;
+            }
+            else
+            {
+                if (title.Length > 50)
+                {
+                    valid = false;
+                }
+            }
+
+            return valid;
         }
     }
 }

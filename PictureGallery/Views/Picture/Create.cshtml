@@ -19,6 +19,10 @@
 
     <form action="/Picture/Upload" method="post" enctype="multipart/form-data" id="form-picture-create">
         <label>
+            Picture Title
+            <input type="text" id="title" name="title" value="@(ViewBag.Title)" />
+        </label>
+        <label>
             Upload picture
             <input type="file" id="files" name="files" accept="image/png, image/jpg" multiple />
         </label>
